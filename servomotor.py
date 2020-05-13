@@ -1,31 +1,56 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-servoPIN = 17
+y_servo = 17
+x_servo = 27
+led = 22
+
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(servoPIN, GPIO.OUT)
+GPIO.setup(y_servo, GPIO.OUT)
+GPIO.setup(x_servo, GPIO.OUT)
+GPIO.setup(led, GPIO.OUT)
 
-pwm = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
-pwm.start(2.5) # Initialization
+pwm_y = GPIO.PWM(y_servo, 50)
+pwm_y.start(2.5)
 
-def SetAngle(angle):
-    duty = round(angle / 18.0, 1) + 2.5
-    print(round(angle/18.0, 1))
-    GPIO.output(servoPIN, True)
-    pwm.ChangeDutyCycle(duty)
-    sleep(1)
-    GPIO.output(servoPIN, False)
-    pwm.ChangeDutyCycle(0)
+pwm_x = GPIO.PWM(x_servo, 50)
+pwm_x.start(2.5)
+
+def SetAngle(coords):
+  x, y = coords
+
+  x_duty = round(x / 18.0, 1) + 2.5
+  y_duty = round(y / 18.0, 1) + 2.5
+
+  GPIO.output(y_servo, True)
+  pwm_y.ChangeDutyCycle(y_duty)
+  sleep(1)
+  GPIO.output(y_servo, False)
+  pwm_y.ChangeDutyCycle(0)
+
+  GPIO.output(x_servo, True)
+  pwm_x.ChangeDutyCycle(x_duty)
+  sleep(1)
+  GPIO.output(x_servo, False)
+  pwm_x.ChangeDutyCycle(0)
+
+  GPIO.output(led, GPIO.HIGH)
+
+def calculateAngle(x, y):
+  GPIO.output(led, GPIO.LOW)
+  max_angle = 45
+
+  return (x * max_angle, y * max_angle)
 
 try:
   while True:
-    i = 45
-    while i < 90:
-      SetAngle(i)
-      print(i)
-      sleep(1)
-      i+=1
+    x = raw_input("x: ")
+    y = raw_input("y: ")
+    x_fl = float(x)
+    y_fl = float(y)
+    SetAngle(calculateAngle(x_fl, y_fl))
 
 except KeyboardInterrupt:
-  pwm.stop()
+  pwm_y.stop()
+  GPIO.output(led, GPIO.LOW)
   GPIO.cleanup()
