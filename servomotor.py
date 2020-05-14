@@ -43,15 +43,17 @@ def calculateAngle(x, y):
 
   return (x * max_angle_x, y * max_angle_y)
 
-try:
-  while True:
-    x = raw_input("x: ")
-    y = raw_input("y: ")
-    x_fl = float(x)
-    y_fl = float(y)
-    SetAngle(calculateAngle(x_fl, y_fl))
+if __name__ == '__main__':
+    # for testing purposes
+    try:
+      while True:
+        x = raw_input("x: ")
+        y = raw_input("y: ")
+        x_fl = float(x)
+        y_fl = float(y)
+        SetAngle(calculateAngle(x_fl, y_fl))
 
-except KeyboardInterrupt:
-  pwm_y.stop()
-  GPIO.output(led, GPIO.LOW)
-  GPIO.cleanup()
+    except KeyboardInterrupt:
+      pwm_y.stop()
+      GPIO.output(led, GPIO.LOW)
+      GPIO.cleanup()

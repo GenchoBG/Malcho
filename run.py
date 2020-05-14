@@ -18,6 +18,7 @@ while True:
 
     frame = rawCapture.array
     faces = facedetector.get_faces(frame)
+    print(f'Found {len(faces)} faces')
     
     if len(faces) == 1:
         face = faces[0]
@@ -30,5 +31,5 @@ while True:
         w = (p1[0] + p2[0]) / 2 / image_w
         h = (p1[1] + p2[1]) / 2 / image_h
         
-        # print(w, ' ', h)
+        print(w, ' ', h)
         aim(w, h)

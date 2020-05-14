@@ -4,11 +4,10 @@ import cv2
 import time
 from openvino.inference_engine import IENetwork, IECore
 
-face_ir = 'face-detection-retail-0004.xml'
 
 class FaceDetector():
-    def __init__(self, threshold = 0.5):
-####################### Setup Plugin and Network #######################
+    def __init__(self, threshold = 0.5, face_ir = 'face-detection-retail-0004.xml'):
+        # Setup Plugin and Network 
         start_time = time.time()
         
         self.cur_request_id = 0
